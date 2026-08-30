@@ -1,0 +1,7 @@
+{
+  "name": "CivicLens – Personal Gemini Journal & AI Bureaucracy Layer",
+  "description": "Secure Personal Gemini Journal and AI Bureaucracy Decoder with Epistemic Grounding and Confusion Detector for untangling complex administrative documents and private self-reflection.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

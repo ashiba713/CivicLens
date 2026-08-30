@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with authentication and isolation metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "photoURL": { "type": "string", "description": "Profile picture URL" },
+        "isAnonymous": { "type": "boolean", "description": "Whether user is signed in anonymously" },
+        "lastLogin": { "type": "number", "description": "Timestamp of last login" }
+      },
+      "required": ["uid"]
+    },
+    "JournalSession": {
+      "title": "JournalSession",
+      "description": "A multi-turn personal journaling and brainstorming session isolated by user UID",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique session ID" },
+        "userId": { "type": "string", "description": "UID of owner user" },
+        "title": { "type": "string", "description": "Title or topic of journal reflection" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in ms" },
+        "updatedAt": { "type": "number", "description": "Last update timestamp in ms" },
+        "messages": { "type": "array", "description": "Multi-turn messages exchanged with Gemini" },
+        "summary": { "type": "object", "description": "Automated reflection summary produced by Gemini" },
+        "tags": { "type": "array", "description": "Optional categorization tags" }
+      },
+      "required": ["id", "userId", "createdAt", "updatedAt", "messages"]
+    },
+    "BureaucracyAnalysis": {
+      "title": "BureaucracyAnalysis",
+      "description": "Decoded administrative, legal, or grant policy document with epistemic source badges and confusion detection",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique analysis ID" },
+        "userId": { "type": "string", "description": "UID of owner user" },
+        "title": { "type": "string", "description": "Document or policy title" },
+        "category": { "type": "string", "description": "Administrative category" },
+        "sourceTextSnippet": { "type": "string", "description": "Preview snippet of source text" },
+        "sourceTextFull": { "type": "string", "description": "Full analyzed text" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in ms" },
+        "updatedAt": { "type": "number", "description": "Last update timestamp in ms" },
+        "plainLanguageSummary": { "type": "string", "description": "Plain-English summary" },
+        "whatToDoNextImmediate": { "type": "array", "description": "Immediate priority actions" },
+        "confusionItems": { "type": "array", "description": "Detected ambiguities and vague clauses" },
+        "documents": { "type": "array", "description": "Required documents with epistemic source badges" },
+        "eligibility": { "type": "array", "description": "Eligibility criteria with epistemic source badges" },
+        "deadlines": { "type": "array", "description": "Deadlines with epistemic source badges" },
+        "fees": { "type": "array", "description": "Fees and cost items" },
+        "steps": { "type": "array", "description": "Step by step procedure" },
+        "authority": { "type": "object", "description": "Government/institutional authority info" },
+        "checklist": { "type": "array", "description": "Actionable task items" },
+        "disclaimer": { "type": "string", "description": "AI assistance disclaimer" },
+        "isSaved": { "type": "boolean", "description": "Saved state indicator" }
+      },
+      "required": ["id", "userId", "title", "createdAt", "updatedAt", "plainLanguageSummary", "confusionItems"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private user profile and metadata"
+    },
+    "/users/{userId}/journal_sessions/{sessionId}": {
+      "schema": "JournalSession",
+      "description": "Isolated journal sessions stored in user subcollection"
+    },
+    "/users/{userId}/saved_analyses/{analysisId}": {
+      "schema": "BureaucracyAnalysis",
+      "description": "Isolated saved bureaucracy document analyses stored in user subcollection"
+    },
+    "/journal_sessions/{sessionId}": {
+      "schema": "JournalSession",
+      "description": "Top-level collection for journal sessions with userId isolation"
+    },
+    "/saved_analyses/{analysisId}": {
+      "schema": "BureaucracyAnalysis",
+      "description": "Top-level collection for bureaucracy analyses with userId isolation"
+    }
+  }
+}
